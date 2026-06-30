@@ -25,11 +25,21 @@ const AuthContext = createContext();
         const data = await login(username, password)
         if (data.success) {
             setAuth(true)
+            const userData= {
+                "username":data.user.username,
+                "bio":data.user.bio,
+                "email":data.user.email,
+                "first_name":data.user.first_name,
+                "last_name":data.user.last_name,
+            }
+            localStorage.setItem('userData', JSON.stringify(userData))
             navigate(`/${username}`)
         } else {
             alert('invalid username or password')
         }
     }
+
+
 
     const location = useLocation();
 
@@ -37,9 +47,6 @@ const AuthContext = createContext();
         check_auth()
     }, [location.pathname])
 
-    // useEffect(() => {
-    //     check_auth()
-    // }, [window.location.pathname])
 
     return (
         <AuthContext.Provider value={{auth, authLoading, auth_login}}>

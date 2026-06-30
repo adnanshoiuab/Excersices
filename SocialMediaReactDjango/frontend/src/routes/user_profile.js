@@ -1,6 +1,6 @@
 import { Text, VStack, Flex, Box, Heading, HStack, Image, Button, Spacer } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-import { get_user_profile_data, get_users_posts, toggleFollow } from '../api/endpoints';
+import { get_user_profile_data, get_users_posts, toggleFollow,  } from '../api/endpoints';
 import { SERVER_URL } from '../constants/constants';
 import Post from "../components/post";
 
@@ -23,7 +23,7 @@ const UserProfile = () => {
                 <Box w='100%' mt='40px'>
                     <UserDetails username={username} />
                 </Box>
-                <Box w='100%' mt='30px'>
+                <Box w='100%' mt='50px'>
                     <UserPosts username={username} />
                 </Box>
             </VStack>
@@ -63,8 +63,8 @@ const UserDetails = ({ username }) => {
                 setFollowerCount(data.follower_count);
                 setFollowingCount(data.following_count);
 
-                setIsOurProfile(data.is_our_profiled)
-                setFollowingCount(data.following)
+                setIsOurProfile(data.is_our_profile);
+                // setFollowingCount(data.following);
             } catch {
                 console.log("Error fetching user profile data");
             } finally {
@@ -95,10 +95,13 @@ const UserDetails = ({ username }) => {
                         </VStack>
                     </HStack>
                     {
-                        isOurProfile ?
-                            <Button w='100%'>Edit Profile</Button>
+                        loading ?
+                            <Spacer />
                         :
-                            <Button colorScheme="blue" w='100%' >{following ? 'Unfollow' : 'Follow'}</Button>
+                            isOurProfile ?
+                                <Button w='100%'>Edit Profile</Button>
+                            :
+                                <Button onClick={handleToggleFollow} colorScheme="blue" w='100%' >{following ? 'Unfollow' : 'Follow'}</Button>
                     }
                 </VStack>
             </HStack>
@@ -127,13 +130,13 @@ const UserPosts = ({username}) => {
 
     }, [])
     return (
-        <Flex w='100%' wrap='wrap'>
+        <Flex w='100%' wrap='wrap' gap='30px' pb='50px'>
             {loading ? 
                 <Text>Loading...</Text>
             :
 
                 posts.map((post) => {
-                    return <Post key={post.id} username={post.username} description={post.description} formatted_date={post.formatted_date} likes={post.likes} like_count={post.like_count}/>
+                    return <Post key={post.id} id={post.id} username={post.username} description={post.description} formatted_date={post.formatted_date} liked={post.liked} like_count={post.like_count}/>
                 })
             }
             

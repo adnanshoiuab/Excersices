@@ -8,7 +8,7 @@ const api = axios.create({
     withCredentials: true,
 })
 
-api.interceptors.request.use(
+api.interceptors.response.use(
     (response) => response,
     async error => {
         const originalRequest = error.config;
@@ -58,5 +58,35 @@ export const toggleFollow = async (username) => {
 
 export const get_users_posts = async (username) => {
     const response = await api.get(`/posts/${username}/`);
+    return response.data
+}
+
+export const toggleLike = async (id) => {
+    const response = await api.post('/toggleLike/', {id:id})
+    return response.data
+}
+
+export const create_post = async (description) =>{
+    const response = await api.post('/create_post/', {description:description})
+    return response.data
+}
+
+export const get_posts = async (num) => {
+    const response = await api.get(`/get_posts/?page=${num}`)
+    return response.data
+}
+
+export const search_users = async (search) => {
+    const response = await api.get(`/search/?query=${search}`)
+    return response.data
+}
+
+export const logout = async () => {
+    const response = await api.post('/logout/')
+    return response.data
+}
+
+export const update_user = async (values) => {
+    const response = await api.patch('/update_user/', values, { headers: {'Content-Type': 'multipart/form-data'}})
     return response.data
 }

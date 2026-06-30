@@ -13,7 +13,7 @@ const Login = () => {
 
 
     const handleLogin = async () => {
-        auth_login(username, password)
+        await auth_login(username, password)
     }
 
     const handleNav = () => {
@@ -34,7 +34,7 @@ const Login = () => {
                 </FormControl>
                 <VStack w='100%' alignItems='start' gap='10px'>
                     <Button onClick={handleLogin} w='100%' colorScheme="green" fontSize='18px'>Login</Button>
-                    <Text onClick={handleNav} fontSize='14px' color='gray.500'>Don't have an account ? Log In</Text>
+                    <Text onClick={handleNav} fontSize='14px' color='gray.500'>Don't have an account ? Register</Text>
                 </VStack>
             </VStack>
         </Flex>

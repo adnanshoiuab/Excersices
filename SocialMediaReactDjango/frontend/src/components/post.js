@@ -1,8 +1,22 @@
-import { VStack, Text, HStack, Flex, Button, Box } from "@chakra-ui/react";
+import { VStack, Text, HStack, Flex, Box } from "@chakra-ui/react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { toggleLike } from "../api/endpoints";
+import  { useState } from "react";
 
 
-const Post = (username, description, formatted_date, likes, like_count) => {
+const Post = ({ id, username, description, formatted_date, liked, like_count }) => {
+    const [clientLiked, setClientLiked] = useState(liked)
+    const [clientLikeCount, setClientLikeCount] = useState(like_count)
+    const handleToggleLike = async () => {
+        const data = await toggleLike(id);
+        if (data.now_liked) {
+            setClientLiked(true)
+            setClientLikeCount(clientLikeCount+1)
+        } else {
+            setClientLiked(false)
+            setClientLikeCount(clientLikeCount-1)
+        }
+    }
 
     return (
         <VStack w='400px' h='400px' border='1px solid ' borderColor='gray.400' borderRadius='8px'>
@@ -15,8 +29,17 @@ const Post = (username, description, formatted_date, likes, like_count) => {
             <Flex flex='2' w='100%' justifyContent='center' alignItems='center' borderTop='1px solid' bg='gray.50' borderColor= 'gray.400' borderRadius='0 0 8px 8px'>
                 <HStack w='90%' justifyContent='space-between' >
                     <HStack >
-                        <Box><FaRegHeart/></Box>
-                        <Text>{like_count}</Text>
+                        <Box>
+                            {
+                                clientLiked ?
+                                    <Box color='red'>
+                                        <FaHeart onClick={handleToggleLike}/>
+                                    </Box>
+                                :
+                                    <FaRegHeart onClick={handleToggleLike}/>
+                            }
+                        </Box>
+                        <Text>{clientLikeCount}</Text>
                     </HStack>
                     <Text>{formatted_date}</Text>
                 </HStack>
